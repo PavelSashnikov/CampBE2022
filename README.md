@@ -1,1 +1,1 @@
-# CampBE2022
+# Camp serv
