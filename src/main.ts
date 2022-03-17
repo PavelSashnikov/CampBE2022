@@ -7,15 +7,14 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('JS Camp')
-    .setDescription('Camp API description')
+    .setTitle('JS Camp 2022')
+    .setDescription('API description')
     .setVersion('1.0')
-    .addTag('tweeter')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup(RoutePath.swagger, app, document);
 
-  await app.listen(3000);
-  console.log('listen on localhost://3000');
+  await app.listen(process.env.PORT as string);
+  console.log(`listen on http://localhost:${process.env.PORT}`);
 }
 bootstrap();
