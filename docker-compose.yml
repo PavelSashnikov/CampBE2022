@@ -1,0 +1,41 @@
+version: "3"
+services:
+  crud:
+    image: crud-image
+    build: .
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    depends_on:
+      - db
+    ports:
+      - "${PORT}:${PORT}"
+    restart: on-failure
+    environment:
+      DATABASE_URL: "postgres://username:pgpassword@db:${DB_PORT}/${DB_NAME}"
+    networks:
+      - crudNet
+  db:
+    image: db
+    container_name: db
+    build: ./DB
+    environment:
+      POSTGRES_USER: ${DB_LOGIN}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    # DB volumes template
+    volumes:
+      ['db-data:/var/lib/postgresql/data/', 'db-logs:/var/log/postgresql/']
+    ports:
+    - ${DB_PORT}:${DB_PORT}
+    restart: always
+    networks:
+      - crudNet
+
+volumes:
+  db-data:
+    name: ${DOCKER_DB_DATA}
+
+networks:
+  crudNet:
+    driver: bridge
