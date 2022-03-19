@@ -10,15 +10,15 @@ export const DbConfig = (
   type: 'postgres',
   host: 'db',
   synchronize: false,
+  migrationsRun: true,
   port: parseInt(<string>configService.get<string>('DB_PORT')),
   username: configService.get<string>('DB_LOGIN'),
   password: configService.get<string>('DB_PASS'),
   database: configService.get<string>('DB_NAME'),
-  migrationsRun: true,
   entities: [User, Tweet],
   migrations: [join(__dirname, `migrations/*{.ts,.js}`)],
   cli: {
-    migrationsDir: join(__dirname, `migrations`),
     entitiesDir: join(__dirname, `entities`),
+    migrationsDir: join(__dirname, `migrations`),
   },
 });

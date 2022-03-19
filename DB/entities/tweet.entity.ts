@@ -26,6 +26,16 @@ export class Tweet implements ITweet.Tweet {
   @Column('date')
   createdAt: Date;
 
-  @Column('array')
-  comments: ITweet.Comment[];
+  @Column('varchar', {
+    array: true,
+    transformer: {
+      to(n) {
+        return n;
+      },
+      from(n) {
+        return n.map((e: string) => JSON.parse(e));
+      },
+    },
+  })
+  comments: Array<ITweet.Comment>;
 }

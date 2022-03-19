@@ -25,7 +25,7 @@ services:
       POSTGRES_DB: ${DB_NAME}
     # DB volumes template
     volumes:
-      ['db-data:/var/lib/postgresql/data/', 'db-logs:/var/log/postgresql/']
+      ['db-data:/var/lib/postgresql/data/']
     ports:
     - ${DB_PORT}:${DB_PORT}
     restart: always
