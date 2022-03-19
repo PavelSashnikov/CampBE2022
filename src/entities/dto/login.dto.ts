@@ -14,3 +14,10 @@ export class LoginDto {
   @ApiProperty()
   readonly password: string;
 }
+
+export class LoginResponseDto {
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  readonly jwt: string;
+}

@@ -1,7 +1,8 @@
 import { IUser } from 'src/entities/interface/user.interface';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
 
 @Entity('User')
+@Unique(['login'])
 export class User implements IUser {
   @PrimaryGeneratedColumn('uuid')
   id: string;
