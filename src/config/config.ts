@@ -11,6 +11,6 @@ export const swaggerConfig = new DocumentBuilder()
 export const authConf = (configService: ConfigService): JwtModuleOptions => ({
   secret: configService.get<string>('ACCESS_TOKEN'),
   signOptions: {
-    expiresIn: '3h',
+    expiresIn: '4h',
   },
 });
