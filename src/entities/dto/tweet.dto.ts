@@ -6,17 +6,5 @@ export class TweetDto {
   @IsDefined()
   @IsNotEmpty()
   @ApiProperty()
-  readonly author: string;
-
-  @IsString()
-  @IsDefined()
-  @IsNotEmpty()
-  @ApiProperty()
   readonly text: string;
-
-  @IsDate()
-  @IsDefined()
-  @IsNotEmpty()
-  @ApiProperty()
-  readonly createdAt: Date;
 }

@@ -3,6 +3,9 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -26,9 +29,10 @@ export class TweetController {
   }
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @UsePipes(new ValidationPipe())
-  addTweet(@Body() data: TweetDto) {
-    return this.tweetService.addTweet(data);
+  addTweet(@Body() data: TweetDto, @Headers('Authorization') token: string) {
+    return this.tweetService.addTweet(data, token);
   }
 
   @Put(':id')
@@ -38,6 +42,7 @@ export class TweetController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @UsePipes(new ValidationPipe())
   removeTweet(@Param('id') id: string) {
     return this.tweetService.removeTweet(id);
