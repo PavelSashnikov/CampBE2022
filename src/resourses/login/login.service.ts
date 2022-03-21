@@ -18,10 +18,6 @@ export class LoginService {
       where: { login: userData.login },
       select: ['login', 'password'],
     });
-    console.log(
-      '🚀 ~ file: login.service.ts ~ line 21 ~ LoginService ~ login= ~ user',
-      await compare(userData.password, user?.password as string),
-    );
 
     if (!user || !(await compare(userData.password, user.password))) {
       throw new HttpException(

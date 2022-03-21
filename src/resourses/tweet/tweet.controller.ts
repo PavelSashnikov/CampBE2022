@@ -6,14 +6,17 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { RoutePath } from 'src/entities/common/enum';
 import { TweetDto } from 'src/entities/dto/tweet.dto';
+import { JwtGuard } from 'src/guards/auth.guard';
 import { TweetService } from './tweet.service';
 
 @Controller(RoutePath.tweet)
+@UseGuards(new JwtGuard())
 export class TweetController {
   constructor(private tweetService: TweetService) {}
 
