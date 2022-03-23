@@ -44,21 +44,28 @@ export class TweetService {
   };
 
   changeTweet = async (data: TweetDto, id: string) => {
-    const tweet = await this.tweetsRepository.findOneBy({ id });
-    if (!tweet) {
-      throw new NotFoundException('tweet not found');
-    }
+    const tweet = await this.getTweetById(id);
+
     tweet.text = data.text;
 
     return await this.tweetsRepository.save(tweet);
   };
 
   removeTweet = async (id: string) => {
-    const tweet = await this.tweetsRepository.findOneBy({ id });
-    if (!tweet) {
-      throw new NotFoundException('tweet not found');
-    }
+    const tweet = await this.getTweetById(id);
 
     return await this.tweetsRepository.remove(tweet);
+  };
+
+  getTweetById = async (id: string) => {
+    const t = await this.tweetsRepository.findOneBy({ id });
+    if (!t) {
+      throw new NotFoundException(`tweet with ID ${id} not found`);
+    }
+    return t;
+  };
+
+  saveTweet = async (data: ITweet.Tweet) => {
+    return await this.tweetsRepository.save(data);
   };
 }
