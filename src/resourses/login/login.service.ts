@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compare } from 'bcrypt';
 import { User } from 'DB/entities/user.entity';
-import { LoginDto } from 'src/entities/dto/login.dto';
+import { LoginDto, LoginResponseDto } from 'src/entities/dto/login.dto';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class LoginService {
     private usersRepository: Repository<User>,
     private readonly jwtSevice: JwtService,
   ) {}
-  login = async (userData: LoginDto) => {
+  login = async (userData: LoginDto): Promise<LoginResponseDto> => {
     const user = await this.usersRepository.findOne({
       where: { login: userData.login },
       select: ['login', 'password'],

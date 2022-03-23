@@ -10,9 +10,10 @@ import {
   UsePipes,
   ValidationPipe,
   Headers,
+  Query,
 } from '@nestjs/common';
 import { RoutePath } from 'src/entities/common/enum';
-import { TweetDto } from 'src/entities/dto/tweet.dto';
+import { QueryDto, TweetDto } from 'src/entities/dto/tweet.dto';
 import { CommentService } from './comment.service';
 
 @Controller(`${RoutePath.tweet}/:tweetId/${RoutePath.comment}`)
@@ -24,7 +25,8 @@ export class CommentController {
   @UsePipes(new ValidationPipe())
   addComment(
     @Body() data: TweetDto,
-    @Param() tweetId: string,
+    @Query() params: QueryDto,
+    @Param('tweetId') tweetId: string,
     @Headers('Authorization') token: string,
   ) {
     return this.commentService.addComment(data, tweetId, token);
@@ -34,16 +36,23 @@ export class CommentController {
   @UsePipes(new ValidationPipe())
   changeComment(
     @Body() data: TweetDto,
+    @Query() params: QueryDto,
     @Param('id') id: string,
     @Param('tweetId') tweetId: string,
+    @Headers('Authorization') token: string,
   ) {
-    return this.commentService.changeComment(data, id, tweetId);
+    return this.commentService.changeComment(data, id, tweetId, token);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @UsePipes(new ValidationPipe())
-  removeComment(@Param('tweetId') tweetId: string, @Param('id') id: string) {
-    return this.commentService.removeComment(id, tweetId);
+  removeComment(
+    @Query() params: QueryDto,
+    @Param('tweetId') tweetId: string,
+    @Param('id') id: string,
+    @Headers('Authorization') token: string,
+  ) {
+    return this.commentService.removeComment(id, tweetId, token);
   }
 }

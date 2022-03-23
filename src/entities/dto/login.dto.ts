@@ -19,5 +19,19 @@ export class LoginResponseDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  readonly jwt: string;
+  readonly token: string;
+}
+
+export class RegisterResponseDto {
+  @IsString()
+  @IsDefined()
+  @IsNotEmpty()
+  @ApiProperty()
+  readonly id: string;
+
+  @IsString()
+  @IsDefined()
+  @IsNotEmpty()
+  @ApiProperty()
+  readonly login: string;
 }

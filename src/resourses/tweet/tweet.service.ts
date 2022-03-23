@@ -43,16 +43,38 @@ export class TweetService {
     return await this.tweetsRepository.save(tweet);
   };
 
-  changeTweet = async (data: TweetDto, id: string) => {
+  changeTweet = async (data: TweetDto, id: string, token: string) => {
     const tweet = await this.getTweetById(id);
+
+    const info = this.jwtService.decode(token.split(' ')[1]) as {
+      login: string;
+    };
+
+    if (tweet.author !== info.login) {
+      throw new HttpException(
+        'Hey! its not your tweet!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     tweet.text = data.text;
 
     return await this.tweetsRepository.save(tweet);
   };
 
-  removeTweet = async (id: string) => {
+  removeTweet = async (id: string, token: string) => {
     const tweet = await this.getTweetById(id);
+
+    const info = this.jwtService.decode(token.split(' ')[1]) as {
+      login: string;
+    };
+
+    if (tweet.author !== info.login) {
+      throw new HttpException(
+        'Hey! its not your tweet!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     return await this.tweetsRepository.remove(tweet);
   };

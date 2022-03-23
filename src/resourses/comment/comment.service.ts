@@ -5,7 +5,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
 import { TweetDto } from 'src/entities/dto/tweet.dto';
 import { ITweet } from 'src/entities/interface/tweet.interface';
 import { TweetService } from '../tweet/tweet.service';
@@ -39,7 +38,12 @@ export class CommentService {
     return this.tweetService.saveTweet(tweet);
   };
 
-  changeComment = async (data: TweetDto, id: string, tweetId: string) => {
+  changeComment = async (
+    data: TweetDto,
+    id: string,
+    tweetId: string,
+    token: string,
+  ) => {
     const tweet = await this.tweetService.getTweetById(tweetId);
     const comment = tweet.comments.find((e) => e.id === id);
     if (!comment) {
@@ -47,14 +51,34 @@ export class CommentService {
         `comment with ID ${id} not found at tweet with ID ${tweetId}`,
       );
     }
+    const info = this.jwtService.decode(token.split(' ')[1]) as {
+      login: string;
+    };
+    if (comment.author !== info.login) {
+      throw new HttpException(
+        'Hey! its not your comment!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     comment.text = data.text;
 
     this.tweetService.saveTweet(tweet);
   };
 
-  removeComment = async (id: string, tweetId: string) => {
+  removeComment = async (id: string, tweetId: string, token: string) => {
     const tweet = await this.tweetService.getTweetById(tweetId);
+    const info = this.jwtService.decode(token.split(' ')[1]) as {
+      login: string;
+    };
+
     const ind = tweet.comments.findIndex((e) => e.id === id);
+
+    if (tweet.comments[ind].author !== info.login) {
+      throw new HttpException(
+        'Hey! its not your comment!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     tweet.comments.splice(ind, 1);
 
     return this.tweetService.saveTweet(tweet);
