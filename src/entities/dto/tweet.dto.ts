@@ -11,6 +11,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  validate,
 } from 'class-validator';
 import { ITweet } from '../interface/tweet.interface';
 
@@ -123,5 +124,6 @@ export class FilterQueryDto {
     example: '#js,#datamola',
   })
   @Transform((t) => t.value.split(','))
+  @IsString({ each: true })
   hashtags: string[] = [];
 }

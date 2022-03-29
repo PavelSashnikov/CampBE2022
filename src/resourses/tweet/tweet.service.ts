@@ -20,7 +20,21 @@ export class TweetService {
   ) {}
 
   getTweets = async (params: FilterQueryDto) => {
-    return await this.tweetsRepository.find();
+    let query = this.tweetsRepository
+      .createQueryBuilder('tw')
+      .where(`tw.createdAt BETWEEN '${params.dateFrom}' AND '${params.dateTo}'`)
+      .andWhere('tw.text LIKE :text', { text: `%${params.text}%` });
+    // add hashtags search .where("user.id IN (:...ids)", { ids: [1, 2, 3, 4] })
+    if (params.author) {
+      query = query.andWhere('tw.author = :author', {
+        author: params.author,
+      });
+    }
+    return query
+      .orderBy('tw.createdAt', 'DESC')
+      .skip(params.from)
+      .take(params.count)
+      .getMany();
   };
 
   addTweet = async (data: TweetDto, token: string) => {
