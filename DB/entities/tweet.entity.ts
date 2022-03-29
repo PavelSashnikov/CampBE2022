@@ -23,7 +23,7 @@ export class Tweet implements ITweet.Tweet {
   @JoinColumn({ name: 'login' })
   user: User[];
 
-  @Column('date')
+  @Column('timestamptz')
   createdAt: Date;
 
   @Column('varchar', {

@@ -17,7 +17,7 @@ import {
 import { ApiOkResponse } from '@nestjs/swagger';
 import { RoutePath } from 'src/entities/common/enum';
 import {
-  QueryDto,
+  FilterQueryDto,
   TweetDto,
   TweetResponseDto,
 } from 'src/entities/dto/tweet.dto';
@@ -30,8 +30,9 @@ export class TweetController {
 
   @Get()
   @ApiOkResponse({ type: TweetResponseDto, isArray: true })
-  getTweets() {
-    return this.tweetService.getTweets();
+  @UsePipes(new ValidationPipe({ transform: true, skipNullProperties: true }))
+  getTweets(@Query() params: FilterQueryDto) {
+    return this.tweetService.getTweets(params);
   }
 
   @Post()
@@ -49,7 +50,6 @@ export class TweetController {
   @UsePipes(new ValidationPipe())
   changeTweet(
     @Body() data: TweetDto,
-    @Query() params: QueryDto,
     @Param('id') id: string,
     @Headers('Authorization') token: string,
   ) {
@@ -61,7 +61,6 @@ export class TweetController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @UsePipes(new ValidationPipe())
   removeTweet(
-    @Query() params: QueryDto,
     @Param('id') id: string,
     @Headers('Authorization') token: string,
   ) {

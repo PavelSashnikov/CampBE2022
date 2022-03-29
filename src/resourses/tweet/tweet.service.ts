@@ -7,7 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Tweet } from 'DB/entities/tweet.entity';
-import { TweetDto } from 'src/entities/dto/tweet.dto';
+import { FilterQueryDto, TweetDto } from 'src/entities/dto/tweet.dto';
 import { ITweet } from 'src/entities/interface/tweet.interface';
 import { Repository } from 'typeorm';
 
@@ -19,7 +19,7 @@ export class TweetService {
     private jwtService: JwtService,
   ) {}
 
-  getTweets = async () => {
+  getTweets = async (params: FilterQueryDto) => {
     return await this.tweetsRepository.find();
   };
 
