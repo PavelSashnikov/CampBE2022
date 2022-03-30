@@ -38,4 +38,7 @@ export class Tweet implements ITweet.Tweet {
     },
   })
   comments: Array<ITweet.Comment>;
+
+  @Column('varchar', { default: '', select: false })
+  hashtags: string;
 }

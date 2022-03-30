@@ -121,7 +121,7 @@ export class FilterQueryDto {
     default: 10,
     description: 'search by hashtags. Comma separated items',
     type: 'string',
-    example: '#js,#datamola',
+    example: 'js,datamola',
   })
   @Transform((t) => t.value.split(','))
   @IsString({ each: true })

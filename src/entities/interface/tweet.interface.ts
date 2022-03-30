@@ -8,6 +8,7 @@ export namespace ITweet {
 
   export interface Tweet extends CommonFields {
     comments: Comment[];
+    hashtags?: string;
   }
 
   export type Comment = CommonFields;

@@ -24,12 +24,19 @@ export class TweetService {
       .createQueryBuilder('tw')
       .where(`tw.createdAt BETWEEN '${params.dateFrom}' AND '${params.dateTo}'`)
       .andWhere('tw.text LIKE :text', { text: `%${params.text}%` });
-    // add hashtags search .where("user.id IN (:...ids)", { ids: [1, 2, 3, 4] })
     if (params.author) {
       query = query.andWhere('tw.author = :author', {
         author: params.author,
       });
     }
+    if (params.hashtags.length) {
+      params.hashtags.forEach((t) => {
+        query = query.andWhere('tw.hashtags LIKE :tag', {
+          tag: `%#${t},%`,
+        });
+      });
+    }
+
     return query
       .orderBy('tw.createdAt', 'DESC')
       .skip(params.from)
@@ -53,6 +60,7 @@ export class TweetService {
       createdAt: new Date(),
       author: info.login,
       comments: [],
+      hashtags: this.findHashTags(data.text),
     };
     return await this.tweetsRepository.save(tweet);
   };
@@ -72,6 +80,7 @@ export class TweetService {
     }
 
     tweet.text = data.text;
+    tweet.hashtags = this.findHashTags(data.text);
 
     return await this.tweetsRepository.save(tweet);
   };
@@ -104,4 +113,9 @@ export class TweetService {
   saveTweet = async (data: ITweet.Tweet) => {
     return await this.tweetsRepository.save(data);
   };
+
+  private findHashTags(str: string): string {
+    const tags = str.match(/#(\w+)/g);
+    return tags ? tags.join() + ',' : '';
+  }
 }
