@@ -118,7 +118,6 @@ export class FilterQueryDto {
   count: number = 10;
 
   @ApiPropertyOptional({
-    default: 10,
     description: 'search by hashtags. Comma separated items',
     type: 'string',
     example: 'js,datamola',
