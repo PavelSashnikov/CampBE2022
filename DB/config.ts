@@ -8,7 +8,7 @@ export const DbConfig = (
   configService: ConfigService,
 ): TypeOrmModuleOptions => ({
   type: 'postgres',
-  host: 'db',
+  host: configService.get<string>('DB_HOST'),
   synchronize: true,
   // migrationsRun: true,
   port: parseInt(<string>configService.get<string>('DB_PORT')),
