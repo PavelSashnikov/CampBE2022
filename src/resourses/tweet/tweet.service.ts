@@ -23,9 +23,9 @@ export class TweetService {
     let query = this.tweetsRepository
       .createQueryBuilder('tw')
       .where(`tw.createdAt BETWEEN '${params.dateFrom}' AND '${params.dateTo}'`)
-      .andWhere('tw.text LIKE :text', { text: `%${params.text}%` });
+      .andWhere('LOWER(tw.text) LIKE :text', { text: `%${params.text}%` });
     if (params.author) {
-      query = query.andWhere('tw.author = :author', {
+      query = query.andWhere('LOWER(tw.author) = :author', {
         author: params.author,
       });
     }
