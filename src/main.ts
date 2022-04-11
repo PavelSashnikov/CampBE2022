@@ -6,7 +6,7 @@ import { swaggerConfig } from './config/config';
 import { RoutePath } from './entities/common/enum';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup(RoutePath.swagger, app, document);
